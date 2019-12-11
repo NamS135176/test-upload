@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <span>name</span><input type="text" value="">
+    <span>Price</span><input type="text" value="">
+    <span>Image</span><input type="text" value="">
+    <span>description</span><input type="text" value="">
+    <button onclick="add()">Save</button>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        async function add() {
+            let name = await document.querySelectorAll('input')[0].value
+            let Price = await document.querySelectorAll('input')[1].value
+            let Image = await document.querySelectorAll('input')[2].value
+            let description = await document.querySelectorAll('input')[3].value
+            await axios.post(`http://5deeedd6e17c8300140d7c6f.mockapi.io/Products`, {
+                name: `${name}`,
+                Price: `${Price}`,
+                image:`${Image}`,
+                description: `${description}`
+            })
+            .then(function (){
+                window.open('index2.html','_self')
+            })
+        }
+    </script>
+</body>
+
+</html>

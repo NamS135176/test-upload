@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="main.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div class="logo-wrapper">
+                <a href="index1.html"><img src="https://storage.googleapis.com/cart-checkout/cc4cbfd8-b6de-4fde-aab1-e87d715a00bc" alt=""></a>
+            </div>
+            <div class="menu">
+                <ul>
+                    <li><a href="index1.html">TRANG CHỦ</a></li>
+                </ul>
+            </div>
+        </header>
+        <main>
+            <div class="banner">
+                <img src="banner.jpg" alt="">
+            </div>
+            <div class="content">
+                <div class="detail-item">
+                    <div class="img">
+                        <a href="index3.html"><img src="" alt="anh" target="_self"></a>
+                    </div>
+                    <h4></h4>
+                    <p></p>
+                    <p></p>
+                    <p></p>
+                </div>
+            </div>
+        </main>
+        <footer>
+            <span>NGUYỄN THÀNH NAM</span>
+        </footer>
+    </div>
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        let obj
+        async function setValue() {
+            let id = await localStorage.getItem('id')
+            await axios.get(`http://5deeedd6e17c8300140d7c6f.mockapi.io/Products/${id}`)
+                .then(function (response) {
+                    // console.log(response.data);
+                    obj = response.data;
+                    let set = document.querySelector('.detail-item')
+                    set.children[0].children[0].children[0].src = obj.image
+                    set.children[1].innerHTML = `Name: ${obj.name}`
+                    set.children[2].innerHTML = `ID: ${obj.id}`
+                    set.children[3].innerHTML = `Price: ${obj.Price}`
+                    set.children[4].innerHTML = `Description: ${obj.description}`
+                })
+        }
+        setValue()
+
+    </script>
+</body>
+
+</html>

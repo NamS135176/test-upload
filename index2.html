@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="main.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div class="logo-wrapper">
+                <a href="index1.html"><img src="https://storage.googleapis.com/cart-checkout/cc4cbfd8-b6de-4fde-aab1-e87d715a00bc" alt=""></a>
+            </div>
+            <div class="menu">
+                <ul>
+                    <li><a href="index1.html">TRANG CHỦ</a></li>
+                    <li>
+                        <div class="btn">
+                            <button class="btn-primary add" onclick="add()">Add</button>
+                        </div>
+                    </li>
+                </ul>
+                <div class="search">
+                    <div class="input-search">
+                        <input type="text">
+                    </div>
+                    <div class="btn">
+                        <button class="btn-primary" onclick="checkSearch()">TÌM KIẾM</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <main>
+            <div class="banner">
+                <img src="banner.jpg" alt="">
+            </div>
+            <div class="content">
+
+            </div>
+        </main>
+        <footer>
+            <span>NGUYỄN THÀNH NAM</span>
+        </footer>
+    </div>
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        let API = `http://5deeedd6e17c8300140d7c6f.mockapi.io/Products`
+        let arrayData
+        async function loadItem() {
+            //get API, set Array value = data
+            await axios.get(API)
+                .then(item => { arrayData = item.data })
+            //validate form Search ID
+            let valueSearch = document.querySelector('.input-search').children[0]
+            valueSearch.placeholder = `Search value 1-${arrayData.length}`
+            checkSearch = function () {
+                if (Number(valueSearch.value) < 1 || Number(valueSearch.value) > 20 || isNaN(Number(valueSearch.value))) {
+                    alert('Moi ban nhap tu 1 - 20')
+                    valueSearch.value = ''
+                }
+                else {
+                    localStorage.setItem('id', Number(valueSearch.value));
+                    window.open('index3.html', '_self')
+                }
+            }
+            //set HTML cho list
+            let setHTML = document.querySelector('.content')
+            for (let i = 0; i < arrayData.length; i++) {
+                setHTML.insertAdjacentHTML('afterbegin', `<div class="products">
+                    <div class="img">
+                         <a href="index3.html"><img src="" alt="anh" target ="_self" ></a>
+                    </div>
+                    <h4></h4>
+                    <p></p>
+                    <p></p>
+                    <div class="btn">
+                    <button class="btn-primary edit" >Edit</button>
+                    <button class="btn-primary delete" >Delete</button>
+                </div>
+                </div>`)
+            }
+            //set value cho html
+            let setNewsContents = document.querySelectorAll('.products')
+            for (let i = 0; i < arrayData.length; i++) {
+                setNewsContents[i].children[1].innerHTML = `${arrayData[i].name}`
+                setNewsContents[i].children[2].innerHTML = `${arrayData[i].description}`
+                setNewsContents[i].children[3].innerHTML = `${arrayData[i].id}`
+                setNewsContents[i].children[0].children[0].children[0].src = arrayData[i].image
+                setNewsContents[i].children[0].children[0].children[0].addEventListener('click', function () {
+                    localStorage.setItem('id', arrayData[i].id)
+                })
+            }
+            //edit products
+            let editSelect = document.querySelectorAll('.edit')
+            for (let i = 0; i < arrayData.length; i++) {
+                editSelect[i].addEventListener('click', function () {
+                    window.open('edit.html', '_self')
+                    localStorage.setItem('id', arrayData[i].id)
+                })
+            }
+            //delete products
+            let deleteSelect = document.querySelectorAll('.delete')
+            for (let i = 0; i < arrayData.length; i++) {
+                deleteSelect[i].addEventListener('click', function () {
+                    axios.delete(`http://5deeedd6e17c8300140d7c6f.mockapi.io/Products/${Number(setNewsContents[i].children[3].innerHTML)}`)
+                        .then(function () {
+                            location.reload()
+                        })
+                })
+            }
+            //add products
+            add =function() {
+                window.open('add.html', '_self');
+            };
+        }
+        loadItem()
+    </script>
+</body>
+
+</html>
